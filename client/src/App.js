@@ -1,96 +1,54 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+// import React, { useState, useEffect } from 'react'
+import React from 'react'
 
+// import axios from 'axios'
+import Users from './components/Users'
+import CreateUser from './components/CreateUser'
+import MaxLv from './components/MaxLv'
+import Layout from './components/Layout'
 // import logo from './logo.svg';
 import './App.css';
 
 function App() {
-  // const [passwords, setPasswords] = useState([])
+  // const [users, setUsers] = useState(null)
 
+  // const [username, setUsername] = useState('')
+  // const [email, setEmail] = useState('')
   // useEffect(() => {
-  //   getPasswords()
+  //   axios
+  //     .get('/api/users')
+  //     .then((users) => setUsers(users))
+  //     .catch((err) => console.log(err))
   // }, [])
 
-  // const getPasswords = () => {
+  // const submitForm = () => {
+  //   if (username === '') {
+  //     alert('Please fill the username field')
+  //     return
+  //   }
+  //   if (email === '') {
+  //     alert('Please fill the email field')
+  //     return
+  //   }
   //   axios
-  //     .get('/api/passwords')
-  //     .then((response) => {
-  //       const passwords = response.data
-  //       setPasswords(passwords)
+  //     .post('/api/users', {
+  //       username: username,
+  //       email: email,
   //     })
-  //     .catch(function (error) {
-  //       console.log(error)
+  //     .then(function () {
+  //       alert('Account created successfully')
+  //       window.location.reload()
   //     })
-    
+  //     .catch(function () {
+  //       alert('Could not creat account. Please try again')
+  //     })
   // }
-
-  const [users, setUsers] = useState(null)
-
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  useEffect(() => {
-    axios
-      .get('/api/users')
-      .then((users) => setUsers(users))
-      .catch((err) => console.log(err))
-  }, [])
-
-  const submitForm = () => {
-    if (username === '') {
-      alert('Please fill the username field')
-      return
-    }
-    if (email === '') {
-      alert('Please fill the email field')
-      return
-    }
-    axios
-      .post('/api/users', {
-        username: username,
-        email: email,
-      })
-      .then(function () {
-        alert('Account created successfully')
-        window.location.reload()
-      })
-      .catch(function () {
-        alert('Could not creat account. Please try again')
-      })
-  }
   return (
-    <>
-      <h1>My Project</h1>
-      {users === null ? (
-        <p>Loading...</p>
-      ) : users.length === 0 ? (
-        <p>No user available</p>
-      ) : (
-        <>
-          <h2>Available Users</h2>
-          <ol>
-            {users.map((user, index) => (
-              <li key={index}>
-                Name: {user.name} - Email: {user.email}
-              </li>
-            ))}
-          </ol>
-        </>
-      )}
-
-      <form onSubmit={submitForm}>
-        <input
-          onChange={(e) => setUsername(e.target.value)}
-          type="text"
-          placeholder="Enter your username"
-        />
-        <input
-          onChange={(e) => setEmail(e.target.value)}
-          type="text"
-          placeholder="Enter your email address"
-        />
-        <input type="submit" />
-      </form>
-    </>
+    <Layout>
+      <CreateUser />
+      <Users />
+      <MaxLv />
+    </Layout>
   )
 }
 
