@@ -1,7 +1,6 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
   "private": true,
   "description": "mern-react-with-mongodb",
   "author": "r951236958",
