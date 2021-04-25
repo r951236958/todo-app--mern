@@ -3,7 +3,7 @@ let mongoose = require('mongoose')
     router = express.Router()
     jwt = require('jsonwebtoken')
 
-const auth = require('../auth')
+const Auth = require('../auth')
 // free endpoint
 router.get('/free-endpoint', (request, response) => {
   response.json({ message: 'You are free to access me anytime' })

@@ -67,13 +67,13 @@ router.post('/register', (request, response) => {
     .hash(request.body.password, 10)
     .then((hashedPassword) => {
       // create a new user instance and collect the data
-      const user = new User({
+      const newUser = new User({
         email: request.body.email,
         password: hashedPassword,
       })
 
       // save the new user
-      user
+      newUser
         .save()
         // return success if the new user is added to the database successfully
         .then((result) => {
