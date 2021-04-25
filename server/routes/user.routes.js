@@ -1,65 +1,123 @@
-let mongoose = require('mongoose'),
-    express = require('express'),
-    router = express.Router();
+let mongoose = require('mongoose')
+    express = require('express')
+    router = express.Router()
+    bcrypt = require('bcrypt')
+    jwt = require('jsonwebtoken')
 
-let user = require('../models/user-schema');
+let User = require('../models/users.model')
 
-router.route('/create').post((req, res, next) => {
-    user.create(req.body, (error, data) => {
-        if (error) {
-            return next(error)
-        } else {
-            console.log(data)
-            res.json(data)
-        }
+router.post('/login', (request, response) => {
+  // check if email exists
+  User.findOne({ email: request.body.email })
+
+    // if email exists
+    .then((user) => {
+      // compare the password entered and the hashed password found
+      bcrypt
+        .compare(request.body.password, user.password)
+
+        // if the passwords match
+        .then((passwordCheck) => {
+
+          // check if password matches
+          if(!passwordCheck) {
+            return response.status(400).send({
+              message: "Passwords does not match",
+              error,
+            });
+          }
+
+          //   create JWT token
+          const token = jwt.sign(
+            {
+              userId: user._id,
+              userEmail: user.email,
+            },
+            "RANDOM-TOKEN",
+            { expiresIn: "24h" }
+          );
+
+          //   return success response
+          response.status(200).send({
+            message: "Login Successful",
+            email: user.email,
+            token,
+          });
+        })
+        // catch error if password do not match
+        .catch((error) => {
+          response.status(400).send({
+            message: "Passwords does not match",
+            error,
+          });
+        });
     })
-});
-
-router.route('/').get((req, res, next) => {
-  user.find((error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
+    // catch error if email does not exist
+    .catch((e) => {
+      response.status(404).send({
+        message: "Email not found",
+        e,
+      });
+    });
 })
 
-router.route('/edit/:id').get((req, res, next) => {
-  user.findById(req.params.id, (error, data) => {
-    if (error) {
-      return next(error)
-    } else {
-      res.json(data)
-    }
-  })
-})
+router.post('/register', (request, response) => {
+  // hash the password
+  bcrypt
+    .hash(request.body.password, 10)
+    .then((hashedPassword) => {
+      // create a new user instance and collect the data
+      const user = new User({
+        email: request.body.email,
+        password: hashedPassword,
+      })
 
-
-router.route('/update/:id').put((req, res, next) => {
-    user.findByIdAndUpdate(req.params.id, {
-        $set: req.body
-    }, (error, data) => {
-        if (error) {
-            return next(error);
-            console.log(error)
-        } else {
-            res.json(data)
-            console.log('User updated successfully !')
-        }
+      // save the new user
+      user
+        .save()
+        // return success if the new user is added to the database successfully
+        .then((result) => {
+          response.status(201).send({
+            message: 'User Created Successfully',
+            result,
+          })
+        })
+        // catch erroe if the new user wasn't added successfully to the database
+        .catch((error) => {
+          response.status(500).send({
+            message: 'Error creating user',
+            error,
+          })
+        })
+    })
+    // catch error if the password hash isn't successful
+    .catch((e) => {
+      response.status(500).send({
+        message: 'Password was not hashed successfully',
+        e,
+      })
     })
 })
 
-router.route('/delete/:id').delete((req, res, next) => {
-    user.findByIdAndRemove(req.params.id, (error, data) => {
-        if (error) {
-            return next(error);
-        } else {
-            res.status(200).json({
-                msg: data
-            })
-        }
-    })
-})
+// router.post('/', (req, res) => {
+//   const { name, email } = req.body
+//   const newUser = new User({
+//     name: name,
+//     email: email,
+//   })
+//   newUser
+//     .save()
+//     .then(() =>
+//       res.json({
+//         message: 'Created account successfully',
+//       })
+//     )
+//     .catch((err) =>
+//       res.status(400).json({
+//         error: err,
+//         message: 'Error creating account',
+//       })
+//     )
+// })
 
 module.exports = router;

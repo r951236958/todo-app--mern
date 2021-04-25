@@ -1,34 +1,71 @@
 const express = require('express')
-const path = require('path')
-const generatePassword = require('password-generator')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const mongoose = require('mongoose')
 
+const dbConnect = require('./db/dbConnect')
+dbConnect()
+// const database = require('./database/db')
+const path = require('path')
 const app = express()
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')))
 
-// Put all API endpoints under '/api'
-app.get('/api/passwords', (req, res) => {
-  const count = 5
+// require('./database')
 
-  // Generate some passwords
-  const passwords = Array.from(Array(count).keys()).map((i) =>
-    generatePassword(12, false)
-  )
+app.use(bodyParser.json())
+app.use(cors())
 
-  // Return them as json
-  res.json(passwords)
+// mongoose.Promise = global.Promise
 
-  console.log(`Sent ${count} passwords`)
+// mongoose
+//   .connect(database.db, {
+//     keepAlive: true,
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   })
+//   .then(
+//     () => {
+//       console.log('Database connected sucessfully !')
+//     },
+//     (error) => {
+//       console.log('Database could not be connected : ' + error)
+//     }
+//   )
+
+const connection = mongoose.connection
+
+connection.once('open', function () {
+  console.log('MongoDB connection established.')
 })
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/build/index.html'))
-})
+const userRoute = require('./routes/user.routes')
+const authRouter = require('./routes/auth.routes')
+app.use('/users', userRoute)
+app.use('/auth', authRouter)
+// API
+// const users = require('/api/users');
+// app.use('/api/users', users);
+
+// app.use(express.static(path.join(__dirname, '../build')))
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../build'))
+// })
+// Curb Cores Error by adding a header here
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+  );
+  next();
+});
+
 
 const port = process.env.PORT || 5000
-app.listen(port)
-
-console.log(`Password generator listening on ${port}`)
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`)
+})
