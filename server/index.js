@@ -3,8 +3,8 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-const dbConnect = require('./db/dbConnect')
-dbConnect()
+require('./db/dbConnect')
+
 // const database = require('./database/db')
 const path = require('path')
 const app = express()
@@ -32,11 +32,11 @@ app.use(cors())
 //     }
 //   )
 
-const connection = mongoose.connection
+// const connection = mongoose.connection
 
-connection.once('open', function () {
-  console.log('MongoDB connection established.')
-})
+// connection.once('open', function () {
+//   console.log('MongoDB connection established.')
+// })
 
 const userRoute = require('./routes/user.routes')
 const authRouter = require('./routes/auth.routes')
