@@ -1,0 +1,52 @@
+@import 'scss/todo--app';
+@import 'scss/bs--navbar';
+@import 'scss/custom';
+@import 'scss/dnd';
+@import 'scss/tooltip';
+@import 'scss/check--mark';
+@import 'scss/variables';
+// @import 'scss/tabs';
+@import 'index.css';
+// @import 'bootswatch/dist/flatly/bootstrap.min.css';
+
+// Make sure to import Bootstrap's `bootstrap.scss` in between `_variables.scss` and `_bootswatch.scss`
+// bootswatch theme: cerulean, cosmo, cyborg, darkly, flatly, journal, litera, lumen, lux, materia, minty, pulse, sandstone, simplex, sketchy, slate, solar, spacelab, superhero, united, yeti
+@import "bootswatch/dist/darkly/variables";
+@import "bootstrap/scss/bootstrap";
+@import "bootswatch/dist/darkly/bootswatch";
+
+body {
+  margin: 0;
+  padding: 0;
+  background: $bg;
+  color: $font-color;
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-weight: lighter;
+  overflow-y: scroll;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  .App {
+    position: relative;
+    margin: 40px auto;
+    width: 550px;
+
+    @media (max-width: 600px) {
+      width: 95%;
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  background-color: $bg;
+  width: 1em;
+  @media (max-width: 600px) {
+    width: 0.5em;
+  }
+}
+
+::-webkit-scrollbar-thumb:window-inactive,
+::-webkit-scrollbar-thumb {
+  background: $input-color;
+  border: 3px solid $bg;
+  border-radius: 3px;
+}

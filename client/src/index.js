@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.js'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import './styles/index.scss'
+// Reach UI
+import '@reach/tabs/styles.css'
+import '@reach/checkbox/styles.css'
 import App from './App'
 // import reportWebVitals from './reportWebVitals';
 

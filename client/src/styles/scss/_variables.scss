@@ -1,0 +1,221 @@
+$bg: #403f4d;
+$green: #62dca5;
+$yellow: #f7f879;
+$red: #e1675a;
+
+$input-color: #2e2d33;
+$item-color: #4e4d5c;
+$font-color: #fbfafb;
+
+$big-font-size: 64px;
+$heading-font-size: 24px;
+$item-font-size: 20px;
+
+@keyframes click {
+  0% {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0 40px 0;
+  font-size: $heading-font-size;
+  .calendar {
+    display: flex;
+    align-items: center;
+    .day {
+      font-size: $big-font-size;
+      font-weight: bold;
+    }
+    .my {
+      padding: 0 0 0 5px;
+      .month {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.progress {
+  position: relative;
+  width: 100%;
+  height: 15px;
+  margin: 0 0 20px;
+  background: $input-color;
+  border-radius: 3px;
+}
+
+.progressbar {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 500ms;
+  &.paused {
+    background: $yellow;
+  }
+  &.completed {
+    background: $green;
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
+  padding: 20px;
+  width: 100%;
+  min-height: 70px;
+  background: $item-color;
+  border: none;
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-size: $item-font-size;
+  @media (max-width: 600px) {
+    margin: 20px auto;
+  }
+  .itemName {
+    width: calc(100% - 110px);
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      background-color: $item-color;
+      height: 0.75em;
+      @media (max-width: 600px) {
+        height: 0.25em;
+      }
+    }
+
+    &::-webkit-scrollbar-thumb:window-inactive,
+    &::-webkit-scrollbar-thumb {
+      background: $bg;
+      border: 3px solid $item-color;
+      border-left: none;
+      border-right: none;
+      border-radius: 3px;
+    }
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100px;
+
+    &.completedButtons {
+      justify-content: flex-end;
+    }
+
+    button {
+      position: relative;
+      height: 24px;
+      border: none;
+      &.delete {
+        width: 24px;
+        background: no-repeat url("../../img/x.svg");
+        &:after {
+          background: $red;
+        }
+      }
+      &.pause {
+        width: 24px;
+        background: no-repeat url("../../img/pause.svg");
+        &:after {
+          background: $yellow;
+        }
+      }
+      &.resume {
+        width: 24px;
+        background: no-repeat url("../../img/resume.svg");
+        &:after {
+          background: $yellow;
+        }
+      }
+      &.complete {
+        width: 30px;
+        background: no-repeat url("../../img/check.svg");
+        &:after {
+          background: $green;
+        }
+      }
+      &:after {
+        display: block;
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 100%;
+        width: 0;
+        height: 0;
+      }
+      &:focus {
+        outline: 1px solid $item-color;
+        &:after {
+          animation: click 0.5s;
+        }
+      }
+      &:hover:after {
+        animation: click 0.5s;
+      }
+    }
+  }
+}
+
+.form {
+  position: relative;
+  input {
+    margin: 0 0 10px 0;
+    padding: 20px 70px 20px 20px;
+    width: 100%;
+    height: 70px;
+    background: $input-color;
+    border: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+    color: $font-color;
+    font-size: $item-font-size;
+    outline: none;
+  }
+  button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    background: no-repeat url("../../img/plus.svg");
+    border: none;
+    &:after {
+      display: block;
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      background: #fff;
+      transform: translate(-50%, -50%);
+      border-radius: 100%;
+      width: 0;
+      height: 0;
+    }
+    &:focus {
+      outline: none;
+    }
+    &:hover:after {
+      animation: click 0.5s;
+    }
+  }
+}
+
