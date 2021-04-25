@@ -15,7 +15,7 @@ require('dotenv').config()
 //     console.log(error)
 //   })
 
-const URI = process.env.DB_URL
+const URI = process.env.MONGODB_URI
 
 mongoose.Promise = global.Promise
 
